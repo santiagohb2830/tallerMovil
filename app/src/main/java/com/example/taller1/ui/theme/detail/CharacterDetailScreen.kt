@@ -18,12 +18,19 @@ import coil3.compose.AsyncImage
 import com.example.taller1.model.Character
 import com.example.taller1.model.mockCharacter
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalContext
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharacterDetailScreen(
     character: Character,
     onBackClick: () -> Unit
 ) {
+    val ctx = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -53,7 +60,13 @@ fun CharacterDetailScreen(
                 contentDescription = character.name,
                 modifier = Modifier
                     .size(220.dp)
-                    .clip(MaterialTheme.shapes.large),
+                    .clip(MaterialTheme.shapes.large)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_DIAL).apply {
+                            data = Uri.parse("tel:${character.id}")
+                        }
+                        ctx.startActivity(intent)
+                    },
                 contentScale = ContentScale.Crop
             )
 
