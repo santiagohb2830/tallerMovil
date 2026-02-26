@@ -13,20 +13,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.taller1.ui.theme.Taller1Theme
 
+import com.example.taller1.model.mockCharacter
+import com.example.taller1.ui.theme.detail.CharacterDetailScreen
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Taller1Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
+    Taller1Theme {
+        CharacterDetailScreen(
+            character = mockCharacter(),
+            onBackClick = {}
+        )
+    }
+}
     }
 }
 
