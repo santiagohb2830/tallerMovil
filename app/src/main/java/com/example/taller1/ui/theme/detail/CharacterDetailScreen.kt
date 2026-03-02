@@ -1,47 +1,52 @@
 package com.example.taller1.ui.theme.detail
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import com.example.taller1.model.Character
-import com.example.taller1.model.mockCharacter
-
-//BONO========================================================
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.runtime.getValue
-
-import androidx.compose.foundation.background
-
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.foundation.Canvas
-//BONO========================================================
-
-import android.content.Intent
-import android.net.Uri
-import androidx.compose.foundation.clickable
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.example.taller1.model.Character
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,28 +56,27 @@ fun CharacterDetailScreen(
 ) {
     val ctx = LocalContext.current
 
-    // PASO 1 BONO: gradiente animado (Brush)
-    val infinite = rememberInfiniteTransition()
+    val infinite = rememberInfiniteTransition(label = "detail-gradient")
     val offsetX by infinite.animateFloat(
         initialValue = 0f,
         targetValue = 1000f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 4000),
             repeatMode = RepeatMode.Reverse
-        )
+        ),
+        label = "detail-gradient-offset"
     )
 
     val animatedGradient = Brush.linearGradient(
         colors = listOf(
-            Color(0xFF00C2FF), // cian
-            Color(0xFF7C4DFF), // morado
-            Color(0xFF00E676)  // verde
+            Color(0xFF00C2FF),
+            Color(0xFF7C4DFF),
+            Color(0xFF00E676)
         ),
         start = Offset(offsetX, 0f),
         end = Offset(offsetX + 300f, 600f)
     )
 
-    // PASO 2 BONO: fondo gradiente animado a pantalla completa
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -102,18 +106,15 @@ fun CharacterDetailScreen(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Imagen redonda + sombra + borde gradiente animado (BONO)
                 Box(
                     modifier = Modifier.size(220.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Canvas(modifier = Modifier.matchParentSize()) {
-                        // aro gradiente (externo)
                         drawCircle(
                             brush = animatedGradient,
                             radius = size.minDimension / 2
                         )
-                        // “corte” interno para que se vea como borde (aro)
                         drawCircle(
                             color = Color.White.copy(alpha = 0.85f),
                             radius = size.minDimension / 2 - 10.dp.toPx()
@@ -149,7 +150,6 @@ fun CharacterDetailScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // 6+ campos (incluye origin.name y location.name)
                 InfoRow(label = "Estado", value = character.status)
                 InfoRow(label = "Especie", value = character.species)
                 InfoRow(label = "Género", value = character.gender)
@@ -172,13 +172,4 @@ private fun InfoRow(label: String, value: String) {
         Text(text = "$label:", style = MaterialTheme.typography.bodyMedium)
         Text(text = value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun CharacterDetailScreenPreview() {
-    CharacterDetailScreen(
-        character = mockCharacter(),
-        onBackClick = {}
-    )
 }

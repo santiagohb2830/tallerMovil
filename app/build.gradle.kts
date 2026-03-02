@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation3:navigation3-runtime:1.1.0-alpha04")
     implementation("androidx.navigation3:navigation3-ui:1.1.0-alpha04")
     implementation("io.ktor:ktor-client-core:3.4.0")
