@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,15 +36,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.example.taller1.model.Character
 import com.example.taller1.model.mockCharacter
-import com.example.taller1.viewmodel.CharactersUiState
-import com.example.taller1.viewmodel.CharactersViewModel
+import com.example.taller1.ui.viewmodel.CharactersViewModel
+import com.example.taller1.ui.viewmodel.UiState
 
 @Composable
 fun TempEntryScreen(
     onOpenDetail: (Character) -> Unit,
     viewModel: CharactersViewModel = viewModel(factory = CharactersViewModel.Factory)
 ) {
-    val uiState by viewModel.uiState
+    val uiState by viewModel.uiState.collectAsState()
 
     TempEntryContent(
         uiState = uiState,
@@ -55,7 +56,7 @@ fun TempEntryScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TempEntryContent(
-    uiState: CharactersUiState,
+    uiState: UiState,
     onOpenDetail: (Character) -> Unit,
     onRetryClick: () -> Unit
 ) {
@@ -67,7 +68,7 @@ private fun TempEntryContent(
         }
     ) { padding ->
         when (uiState) {
-            CharactersUiState.Loading -> {
+            UiState.Loading -> {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -78,7 +79,7 @@ private fun TempEntryContent(
                 }
             }
 
-            is CharactersUiState.Error -> {
+            is UiState.Error -> {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -98,7 +99,7 @@ private fun TempEntryContent(
                 }
             }
 
-            is CharactersUiState.Success -> {
+            is UiState.Success -> {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -107,14 +108,14 @@ private fun TempEntryContent(
                 ) {
                     item {
                         Text(
-                            text = "Cantidad cargada: ${uiState.characters.size}",
+                            text = "Cantidad cargada: ${uiState.data.size}",
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )
                     }
 
                     items(
-                        items = uiState.characters,
+                        items = uiState.data,
                         key = { character -> character.id }
                     ) { character ->
                         CharacterRow(
@@ -182,8 +183,8 @@ private fun CharacterRow(
 @Composable
 private fun TempEntryContentPreview() {
     TempEntryContent(
-        uiState = CharactersUiState.Success(
-            characters = List(3) { index ->
+        uiState = UiState.Success(
+            data = List(3) { index ->
                 mockCharacter().copy(id = index + 1, name = "Rick $index")
             }
         ),

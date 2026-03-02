@@ -1,4 +1,4 @@
-package com.example.taller1.data
+package com.example.taller1.data.remote
 
 import com.example.taller1.model.Character
 import kotlinx.serialization.Serializable
