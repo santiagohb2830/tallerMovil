@@ -11,8 +11,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.example.taller1.navigation.CharacterDetailKey
-import com.example.taller1.navigation.TempEntryKey
-import com.example.taller1.ui.temp.TempEntryScreen
+import com.example.taller1.navigation.CharacterListKey
+import com.example.taller1.ui.list.CharacterListScreen
 import com.example.taller1.ui.theme.Taller1Theme
 import com.example.taller1.ui.theme.detail.CharacterDetailScreen
 
@@ -24,9 +24,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Taller1Theme {
                 val activity = LocalContext.current as? Activity
-
-                // Backstack de Navigation3: arranca en la pantalla TEMP
-                val backStack = remember { mutableStateListOf<Any>(TempEntryKey) }
+                val backStack = remember { mutableStateListOf<Any>(CharacterListKey) }
 
                 NavDisplay(
                     backStack = backStack,
@@ -38,9 +36,9 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     entryProvider = entryProvider {
-                        entry<TempEntryKey> {
-                            TempEntryScreen(
-                                onOpenDetail = { character ->
+                        entry<CharacterListKey> {
+                            CharacterListScreen(
+                                onCharacterClick = { character ->
                                     backStack.add(CharacterDetailKey(character))
                                 }
                             )

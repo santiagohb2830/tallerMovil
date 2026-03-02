@@ -4,7 +4,7 @@ import com.example.taller1.model.Character
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object TempEntryKey
+data object CharacterListKey
 
 @Serializable
 data class CharacterDetailKey(val character: Character)
